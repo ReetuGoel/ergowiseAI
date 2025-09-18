@@ -3,12 +3,9 @@
 ### 🎯 **Phase 1: Immediate UI/UX Enhancements (High Impact, Low Effort)**
 
 #### A. Enhanced Dashboard Cards
-- **Add icons** to each dashboard card (charts, streaks, scores)
-- **Progress bars** for visual feedback (Weekly Breaks: 23/35)
-- **Hover animations** and micro-interactions
-- **Click actions** - drill down to detailed views
 
-#### B. Better Navigation
+# Improvement Roadmap
+
 - **Breadcrumbs** for better orientation
 - **Progress indicators** across assessment flow
 - **Quick action buttons** (Start Break, Quick Assessment)
