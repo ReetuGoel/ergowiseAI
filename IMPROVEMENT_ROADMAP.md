@@ -51,4 +51,5 @@
 5. **Build Real Recommendations Engine** (2 hours)
 6. **Add Data Visualization Charts** (1.5 hours)
 
-# Trigger Azure deployment again
+# Trigger Azure deployment after secret update
+_ci-trigger: trivial update to start workflow_
