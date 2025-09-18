@@ -18,10 +18,24 @@ jobs:
       - name: Build app
         run: cd ergowise-app && npm run build
 
+      - name: Verify build output
+        run: ls -la ergowise-app/build || echo "build folder not found"
+
+      - name: Check Azure deployment token presence
+        env:
+          AZURE_TOKEN_CHECK: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+        run: |
+          if [ -z "${AZURE_TOKEN_CHECK}" ]; then
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN is NOT set in this runner"
+            exit 1
+          else
+            echo "AZURE_STATIC_WEB_APPS_API_TOKEN is set"
+          fi
+
       - name: Build and Deploy
         uses: azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          app_location: "/ergowise-app"
-          output_location: "/ergowise-app/build"
+          app_location: "ergowise-app"
+          output_location: "ergowise-app/build"
           action: "upload"
