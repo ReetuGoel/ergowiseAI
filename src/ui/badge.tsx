@@ -22,22 +22,20 @@ export function Badge({
         borderRadius: "12px",
         padding: "0.3em 1em",
         fontWeight: 500,
-        fontSize: "0.95em",
+        fontSize: "0.75rem",
         letterSpacing: "0.03em",
         boxShadow:
           variant === "outline"
-            ? "0 1px 4px rgba(25, 118, 210, 0.12)"
-            : "none",
+            ? "0 1px 4px rgba(251,146,60,0.25)"
+            : "0 1px 4px rgba(0,0,0,0.08)",
         border:
           variant === "outline"
             ? "1px solid var(--color-primary)"
             : "none",
+        textTransform: 'uppercase'
       }}
     >
       {children}
     </span>
   );
 }
-
-// Usage example
-// <Badge className={getPriorityColor(rec.priority)}>{rec.priority} priority</Badge>
