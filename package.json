@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "install:all": "npm ci && cd ergowise-app && npm ci",
+    "build:all": "npm run build && cd ergowise-app && npm run build",
+    "start:ergowise-app": "cd ergowise-app && npm start",
+    "start:root": "npm run dev"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
