@@ -53,3 +53,5 @@
 
 # Trigger Azure deployment after secret update
 _ci-trigger: trivial update to start workflow_
+
+_ci-trigger-2: second trivial update to retrigger workflow_
