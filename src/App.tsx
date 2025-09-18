@@ -8,6 +8,7 @@ import { BarChart3, Target, Calendar, TrendingUp, Moon, Sun, Activity } from 'lu
 import { useToast } from './toast-context';
 import { useTheme } from './theme-context';
 import { WeeklyBreaksChart, ProgressTrendChart, ErgonomicCategoriesChart, DailyActivityChart, WellnessScoreRadial } from './charts';
+import PostureCapture from './PostureCapture';
 import { Sidebar } from './sidebar';
 
 function App() {
@@ -41,6 +42,13 @@ function App() {
 
   let toggleTheme = () => {};
   let isDark = false;
+  const [accent, setAccent] = useState<string>(() => {
+    try {
+      return localStorage.getItem('ergowise:accent') || '#ea580c';
+    } catch {
+      return '#ea580c';
+    }
+  });
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const theme = useTheme();
@@ -70,6 +78,15 @@ function App() {
   const handleThemeToggle = () => {
     toggleTheme();
     addToast(`Switched to ${isDark ? 'light' : 'dark'} mode`, 'info');
+  };
+
+  const handleAccentChange = (newColor: string) => {
+    setAccent(newColor);
+    try { localStorage.setItem('ergowise:accent', newColor); } catch {}
+    // update CSS variables directly
+    document.documentElement.style.setProperty('--color-primary', newColor);
+    document.documentElement.style.setProperty('--color-accent', newColor);
+    addToast('Accent color updated', 'success');
   };
 
   return (
@@ -102,7 +119,18 @@ function App() {
               position: 'relative'
             }}>
               {/* Theme Toggle & Sign Out - Top Right */}
-              <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', gap: 8 }}>
+              <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
+                {/* Accent Color Picker */}
+                <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--color-text-soft)', background: 'var(--color-surface-alt2)', padding: '4px 8px', borderRadius: 8, border: '1px solid var(--color-surface-alt2)' }}>
+                  <span>Accent</span>
+                  <input
+                    type="color"
+                    value={accent}
+                    onChange={(e) => handleAccentChange(e.target.value)}
+                    style={{ width: 28, height: 28, border: 'none', background: 'transparent', cursor: 'pointer', padding: 0 }}
+                    aria-label="Select accent color"
+                  />
+                </label>
                 <button 
                   onClick={handleThemeToggle}
                   style={{
@@ -287,6 +315,16 @@ function App() {
                   <p style={{ color: 'var(--color-text-soft)', marginBottom: 16 }}>
                     Here you will see personalized ergonomic recommendations after your assessment.
                   </p>
+                </section>
+              )}
+
+              {activeTab === 'Posture' && (
+                <section>
+                  <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: 'var(--color-primary)' }}>Posture Analysis</h2>
+                  <p style={{ color: 'var(--color-text-soft)', marginBottom: 16 }}>
+                    Upload up to 5 images to analyze posture and receive recommendations.
+                  </p>
+                  <PostureCapture />
                 </section>
               )}
 

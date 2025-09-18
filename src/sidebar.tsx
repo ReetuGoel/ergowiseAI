@@ -45,7 +45,8 @@ export function Sidebar({ onQuickAction, activeTab, setActiveTab }: SidebarProps
     { id: 'Dashboard', icon: <BarChart3 size={18} />, label: 'Dashboard' },
     { id: 'Assessment', icon: <CheckCircle size={18} />, label: 'Assessment' },
     { id: 'Analytics', icon: <Target size={18} />, label: 'Analytics' },
-    { id: 'Break Timer', icon: <Clock size={18} />, label: 'Break Timer' }
+    { id: 'Break Timer', icon: <Clock size={18} />, label: 'Break Timer' },
+    { id: 'Posture', icon: <CheckCircle size={18} />, label: 'Posture' }
   ];
 
   return (
