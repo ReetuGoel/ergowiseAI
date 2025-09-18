@@ -55,3 +55,5 @@
 _ci-trigger: trivial update to start workflow_
 
 _ci-trigger-2: second trivial update to retrigger workflow_
+
+_ci-trigger-3: third trigger to run secret-check-step_
