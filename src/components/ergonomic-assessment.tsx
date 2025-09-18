@@ -298,8 +298,12 @@ export function ErgonomicAssessment({ onComplete }: AssessmentProps) {
                     <span>{question.max}</span>
                   </div>
                   <Slider
-                    value={[(() => { const v = formData[question.key]; return typeof v === 'number' ? v : (question.min ?? 0); })()]}
-                    onValueChange={(value) => handleInputChange(question.key, value[0])}
+                    value={[
+                      typeof formData[question.key] === 'number'
+                        ? (formData[question.key] as number)
+                        : (question.min ?? 0)
+                    ]}
+                    onValueChange={(value: number[]) => handleInputChange(question.key, value[0])}
                     max={question.max}
                     min={question.min}
                     step={question.step}
