@@ -13,12 +13,20 @@ const PostureCapture: React.FC = () => {
     if (files.length > 5) {
       files = files.slice(0, 5);
       setUploadMessage('You can upload a maximum of 5 photos at once.');
-    } else {
+    } else if (files.length > 0) {
       setUploadMessage(`${files.length} photo${files.length > 1 ? 's' : ''} selected successfully!`);
     }
     setSelectedFiles(files);
-    setPreview(null);
     setAnalysisResult(null);
+    if (files[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      setPreview(null);
+    }
     setTimeout(() => setUploadMessage(null), 3000);
   };
 
@@ -123,6 +131,22 @@ const PostureCapture: React.FC = () => {
           fontWeight: 500
         }}>
           {uploadMessage}
+        </div>
+      )}
+
+      {preview && (
+        <div style={{ marginTop: 8, textAlign: 'center' }}>
+          <p style={{ fontSize: 12, color: 'var(--color-text-soft)', marginBottom: 8 }}>Preview of first image:</p>
+          <img 
+            src={preview} 
+            alt="preview" 
+            style={{
+              maxWidth: '100%',
+              borderRadius: 12,
+              border: '1px solid var(--color-surface-alt2)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+            }}
+          />
         </div>
       )}
 
