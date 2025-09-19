@@ -2,7 +2,10 @@ import React from 'react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadialBarChart, RadialBar } from 'recharts';
 import { useTheme } from './theme-context';
 
-// Sample data for different charts
+// Helper to read CSS variable with fallback
+const cssVar = (name: string, fallback: string) => `var(${name}, ${fallback})`;
+
+// Sample data for different charts (use token references where colors were embedded)
 const weeklyBreaksData = [
   { day: 'Mon', breaks: 5, target: 5 },
   { day: 'Tue', breaks: 3, target: 5 },
@@ -23,10 +26,10 @@ const monthlyProgressData = [
 ];
 
 const ergonomicCategoriesData = [
-  { name: 'Posture', value: 85, color: '#ea580c' },
-  { name: 'Monitor', value: 92, color: '#fb923c' },
-  { name: 'Lighting', value: 78, color: '#fed7aa' },
-  { name: 'Breaks', value: 66, color: '#c2410c' }
+  { name: 'Posture', value: 85, color: cssVar('--chart-1', '#115ea3') },
+  { name: 'Monitor', value: 92, color: cssVar('--chart-2', '#0f6cbd') },
+  { name: 'Lighting', value: 78, color: cssVar('--chart-3', '#3b88d4') },
+  { name: 'Breaks', value: 66, color: cssVar('--chart-4', '#6cb8f6') }
 ];
 
 const dailyActivityData = [
@@ -43,14 +46,16 @@ const dailyActivityData = [
 
 export function WeeklyBreaksChart() {
   const { isDark } = useTheme();
-  const textColor = isDark ? '#fbbf24' : '#431407';
-  
+  const textColor = isDark ? cssVar('--neutral-text', '#ffffff') : cssVar('--neutral-text', '#201f1e');
+  const gridColor = isDark ? cssVar('--neutral-border', '#3b3a39') : cssVar('--neutral-border', '#d1d1d1');
+  const breaksColor = cssVar('--chart-2', '#0f6cbd');
+  const targetColor = cssVar('--chart-5', '#9fd5fa');
   return (
     <div style={{ background: 'var(--color-surface)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-md)' }}>
       <h3 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: 18, fontWeight: 600 }}>Weekly Break Pattern</h3>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={weeklyBreaksData}>
-          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#44403c' : '#fed7aa'} />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
           <XAxis dataKey="day" stroke={textColor} fontSize={12} />
           <YAxis stroke={textColor} fontSize={12} />
           <Tooltip 
@@ -61,8 +66,8 @@ export function WeeklyBreaksChart() {
               color: textColor
             }} 
           />
-          <Bar dataKey="breaks" fill="#ea580c" radius={4} />
-          <Bar dataKey="target" fill="#fed7aa" radius={4} />
+          <Bar dataKey="breaks" fill={breaksColor} radius={4} />
+          <Bar dataKey="target" fill={targetColor} radius={4} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -71,14 +76,15 @@ export function WeeklyBreaksChart() {
 
 export function ProgressTrendChart() {
   const { isDark } = useTheme();
-  const textColor = isDark ? '#fbbf24' : '#431407';
-  
+  const textColor = isDark ? cssVar('--neutral-text', '#ffffff') : cssVar('--neutral-text', '#201f1e');
+  const gridColor = isDark ? cssVar('--neutral-border', '#3b3a39') : cssVar('--neutral-border', '#d1d1d1');
+  const strokeColor = cssVar('--chart-1', '#115ea3');
   return (
     <div style={{ background: 'var(--color-surface)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-md)' }}>
       <h3 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: 18, fontWeight: 600 }}>6-Month Progress Trend</h3>
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart data={monthlyProgressData}>
-          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#44403c' : '#fed7aa'} />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
           <XAxis dataKey="month" stroke={textColor} fontSize={12} />
           <YAxis stroke={textColor} fontSize={12} />
           <Tooltip 
@@ -92,14 +98,14 @@ export function ProgressTrendChart() {
           <Area 
             type="monotone" 
             dataKey="score" 
-            stroke="#ea580c" 
+            stroke={strokeColor} 
             fill="url(#colorGradient)" 
             strokeWidth={3}
           />
           <defs>
             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ea580c" stopOpacity={0.8}/>
-              <stop offset="95%" stopColor="#ea580c" stopOpacity={0.1}/>
+              <stop offset="5%" stopColor={strokeColor} stopOpacity={0.8}/>
+              <stop offset="95%" stopColor={strokeColor} stopOpacity={0.1}/>
             </linearGradient>
           </defs>
         </AreaChart>
@@ -109,8 +115,6 @@ export function ProgressTrendChart() {
 }
 
 export function ErgonomicCategoriesChart() {
-  const { isDark } = useTheme();
-  
   return (
     <div style={{ background: 'var(--color-surface)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-md)' }}>
       <h3 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: 18, fontWeight: 600 }}>Ergonomic Categories</h3>
@@ -134,7 +138,7 @@ export function ErgonomicCategoriesChart() {
               background: 'var(--color-surface-alt)', 
               border: '1px solid var(--color-primary)', 
               borderRadius: 8,
-              color: isDark ? '#fbbf24' : '#431407'
+              color: 'var(--color-text)'
             }} 
           />
         </PieChart>
@@ -153,32 +157,34 @@ export function ErgonomicCategoriesChart() {
 
 export function DailyActivityChart() {
   const { isDark } = useTheme();
-  const textColor = isDark ? '#fbbf24' : '#431407';
-  
+  const textColor = isDark ? cssVar('--neutral-text', '#ffffff') : cssVar('--neutral-text', '#201f1e');
+  const gridColor = isDark ? cssVar('--neutral-border', '#3b3a39') : cssVar('--neutral-border', '#d1d1d1');
+  const strokeColor = cssVar('--chart-2', '#0f6cbd');
+  const activeDot = cssVar('--chart-3', '#3b88d4');
   return (
     <div style={{ background: 'var(--color-surface)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-md)' }}>
       <h3 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: 18, fontWeight: 600 }}>Today's Activity Level</h3>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={dailyActivityData}>
-          <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#44403c' : '#fed7aa'} />
-          <XAxis dataKey="time" stroke={textColor} fontSize={12} />
-          <YAxis stroke={textColor} fontSize={12} />
-          <Tooltip 
-            contentStyle={{ 
-              background: 'var(--color-surface-alt)', 
-              border: '1px solid var(--color-primary)', 
-              borderRadius: 8,
-              color: textColor
-            }} 
-          />
-          <Line 
-            type="monotone" 
-            dataKey="activity" 
-            stroke="#ea580c" 
-            strokeWidth={3}
-            dot={{ fill: '#ea580c', strokeWidth: 2, r: 4 }}
-            activeDot={{ r: 6, fill: '#fb923c' }}
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+            <XAxis dataKey="time" stroke={textColor} fontSize={12} />
+            <YAxis stroke={textColor} fontSize={12} />
+            <Tooltip 
+              contentStyle={{ 
+                background: 'var(--color-surface-alt)', 
+                border: '1px solid var(--color-primary)', 
+                borderRadius: 8,
+                color: textColor
+              }} 
+            />
+            <Line 
+              type="monotone" 
+              dataKey="activity" 
+              stroke={strokeColor} 
+              strokeWidth={3}
+              dot={{ fill: strokeColor, strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6, fill: activeDot }}
+            />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -186,16 +192,15 @@ export function DailyActivityChart() {
 }
 
 export function WellnessScoreRadial({ score = 82 }: { score?: number }) {
-  const { isDark } = useTheme();
-  const data = [{ name: 'Wellness Score', value: score, fill: '#ea580c' }];
-  
+  const fillColor = cssVar('--chart-1', '#115ea3');
+  const data = [{ name: 'Wellness Score', value: score, fill: fillColor }];
   return (
     <div style={{ background: 'var(--color-surface)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-md)', textAlign: 'center' }}>
       <h3 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: 18, fontWeight: 600 }}>Overall Wellness Score</h3>
       <div style={{ position: 'relative', height: 200 }}>
         <ResponsiveContainer width="100%" height={200}>
           <RadialBarChart cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" data={data}>
-            <RadialBar dataKey="value" cornerRadius={10} fill="#ea580c" />
+            <RadialBar dataKey="value" cornerRadius={10} fill={fillColor} />
           </RadialBarChart>
         </ResponsiveContainer>
         <div style={{ 

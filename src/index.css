@@ -1,23 +1,125 @@
-/* Clean simplified stylesheet */
+/* Design Tokens (Microsoft Fluent inspired, WCAG AA compliant) */
+/* Brand & Neutral Core */
 :root {
-  --color-primary: #fb923c;
-  --color-secondary: #ea580c;
-  --color-background: #fff7ed;
-  --color-surface: #ffffff;
-  --color-surface-alt: #ffedd5;
-  --color-text: #431407;
-  --color-text-soft: #7c2d12;
-  --gradient-bg: radial-gradient(circle at 30% 20%, #fff1e6 0%, #fff7ed 60%, #fffbeb 100%);
+  /* Brand scale (Fluent references: brandForeground1/hover, brandBackground1) */
+  --brand-primary: #115ea3; /* Base interactive brand */
+  --brand-primary-hover: #0f548c;
+  --brand-primary-active: #0c3b5e;
+  --brand-accent: #0f6cbd; /* Alternate accent */
+  --brand-accent-soft: #6cb8f6; /* Light tint */
+
+  /* Neutral surfaces (light) */
+  --neutral-bg: #ffffff; /* Base page */
+  --neutral-bg-alt: #f3f2f1; /* Card surface */
+  --neutral-bg-subtle: #faf9f8; /* Subtle background */
+  --neutral-border: #d1d1d1; /* Divider / strokes */
+  --neutral-border-strong: #a19f9d;
+  --neutral-focus-ring: rgba(15,108,189,0.55);
+
+  /* Text */
+  --neutral-text: #201f1e; /* Primary text */
+  --neutral-text-soft: #605e5c; /* Secondary */
+  --neutral-text-inverse: #ffffff;
+
+  /* Semantic status */
+  --color-success: #107c10;
+  --color-danger: #d13438;
+  --color-warning: #f7630c;
+  --color-info: #005fb8;
+
+  /* Chart palette (ordered) */
+  --chart-1: var(--brand-primary);
+  --chart-2: var(--brand-accent);
+  --chart-3: #3b88d4;
+  --chart-4: #6cb8f6;
+  --chart-5: #9fd5fa;
+
+  /* Aliases (compat layer for existing code) */
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-primary-hover);
+  --color-accent: var(--brand-accent);
+  --color-background: var(--neutral-bg);
+  --color-surface: var(--neutral-bg-alt);
+  --color-surface-alt: var(--neutral-bg-subtle);
+  --color-text: var(--neutral-text);
+  --color-text-soft: var(--neutral-text-soft);
+
+  /* Decorative gradient */
+  --gradient-bg: radial-gradient(circle at 30% 20%, var(--neutral-bg-subtle) 0%, var(--neutral-bg-alt) 60%, var(--neutral-bg) 100%);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 3px var(--neutral-focus-ring);
 }
 
+/* Dark Theme Tokens */
 [data-theme="dark"] {
-  --color-background: #0c0a09;
-  --color-surface: #1c1917;
-  --color-surface-alt: #292524;
-  --color-text: #fbbf24;
-  --color-text-soft: #d97706;
-  --gradient-bg: radial-gradient(circle at 30% 20%, #1c1917 0%, #0c0a09 60%, #000 100%);
+  --brand-primary: #62a8f5;
+  --brand-primary-hover: #4d94e0;
+  --brand-primary-active: #2c5f99;
+  --brand-accent: #3b82f6;
+  --brand-accent-soft: #2563eb;
+
+  --neutral-bg: #11100f;
+  --neutral-bg-alt: #1b1a19;
+  --neutral-bg-subtle: #252423;
+  --neutral-border: #3b3a39;
+  --neutral-border-strong: #5a5958;
+  --neutral-focus-ring: rgba(98,168,245,0.55);
+
+  --neutral-text: #ffffff;
+  --neutral-text-soft: #d2d0ce;
+  --neutral-text-inverse: #11100f;
+
+  --color-success: #3bb143;
+  --color-danger: #f1707b;
+  --color-warning: #f7893d;
+  --color-info: #62a8f5;
+
+  --chart-1: var(--brand-primary);
+  --chart-2: #2b88d8;
+  --chart-3: #479ef5;
+  --chart-4: #7cc0f8;
+  --chart-5: #9fd5fa;
+
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-primary-hover);
+  --color-accent: var(--brand-accent);
+  --color-background: var(--neutral-bg);
+  --color-surface: var(--neutral-bg-alt);
+  --color-surface-alt: var(--neutral-bg-subtle);
+  --color-text: var(--neutral-text);
+  --color-text-soft: var(--neutral-text-soft);
+
+  --gradient-bg: radial-gradient(circle at 30% 20%, var(--neutral-bg-alt) 0%, var(--neutral-bg) 60%, #000 100%);
+  --focus-ring: 0 0 0 3px var(--neutral-focus-ring);
 }
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html:focus-within { scroll-behavior: auto; }
+}
+
+/* High Contrast Mode (user preference) */
+@media (prefers-contrast: more) {
+  :root, [data-theme="dark"] {
+    --neutral-border: var(--brand-primary);
+    --neutral-border-strong: var(--brand-primary-hover);
+    --focus-ring: 0 0 0 3px var(--brand-primary);
+  }
+}
+
+/* Base global accessibility helpers */
+html, body { background: var(--color-background); color: var(--color-text); }
+
+:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; box-shadow: var(--focus-ring); }
+
+.focus-ring { outline: 2px solid var(--brand-primary); outline-offset: 2px; box-shadow: var(--focus-ring); }
 
 body {
   margin:0;

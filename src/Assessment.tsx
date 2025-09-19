@@ -8,14 +8,26 @@ export function BreakTimer({ startTrigger }: { startTrigger?: number }) {
   const [secondsLeft, setSecondsLeft] = useState(BREAK_DURATION);
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const liveRef = useRef<HTMLDivElement | null>(null);
+
+  const announce = (msg: string) => {
+    if (liveRef.current) {
+      // Clear then set to retrigger SR announcement
+      liveRef.current.textContent = '';
+      // Small timeout ensures DOM mutation recognized
+      setTimeout(() => { if (liveRef.current) liveRef.current.textContent = msg; }, 10);
+    }
+  };
 
   const startBreak = () => {
     setIsRunning(true);
+    announce('Break started. Timer counting down.');
     timerRef.current = window.setInterval(() => {
       setSecondsLeft(prev => {
         if (prev <= 1) {
           if (timerRef.current) window.clearInterval(timerRef.current);
           setIsRunning(false);
+          announce('Break complete. Great job!');
           return BREAK_DURATION;
         }
         return prev - 1;
@@ -49,6 +61,7 @@ export function BreakTimer({ startTrigger }: { startTrigger?: number }) {
     if (timerRef.current) window.clearInterval(timerRef.current);
     setIsRunning(false);
     setSecondsLeft(BREAK_DURATION);
+    announce('Break canceled.');
   };
 
   const minutes = Math.floor(secondsLeft / 60);
@@ -61,10 +74,11 @@ export function BreakTimer({ startTrigger }: { startTrigger?: number }) {
       borderRadius: 16,
       padding: '2rem',
       textAlign: 'center',
-      boxShadow: '0 2px 8px rgba(234,88,12,0.12)',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
       maxWidth: 320,
       margin: '2rem auto'
     }}>
+      <div ref={liveRef} aria-live="polite" aria-atomic="true" style={{ position: 'absolute', width: 1, height: 1, margin: -1, padding: 0, overflow: 'hidden', clip: 'rect(0 0 0 0)', border: 0 }} />
       <h2 style={{ color: 'var(--color-primary)', marginBottom: '1rem', fontWeight: 700 }}>Take a Break!</h2>
       <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--color-accent)', marginBottom: '1.5rem' }}>
         {minutes}:{seconds.toString().padStart(2, '0')}
@@ -79,7 +93,7 @@ export function BreakTimer({ startTrigger }: { startTrigger?: number }) {
           fontSize: '1rem',
           cursor: 'pointer',
           fontWeight: 600,
-          boxShadow: '0 1px 4px rgba(234,88,12,0.3)'
+          boxShadow: '0 1px 4px rgba(0,0,0,0.2)'
         }} onClick={startBreak}>Start Break</button>
       ) : (
         <button style={{
@@ -91,7 +105,7 @@ export function BreakTimer({ startTrigger }: { startTrigger?: number }) {
           fontSize: '1rem',
           cursor: 'pointer',
           fontWeight: 600,
-          boxShadow: '0 1px 4px rgba(194,65,12,0.3)'
+          boxShadow: '0 1px 4px rgba(0,0,0,0.25)'
         }} onClick={stopBreak}>Stop Break</button>
       )}
       <p style={{ marginTop: '1.5rem', color: 'var(--color-text)' }}>Regular breaks help you stay healthy and focused!</p>
@@ -111,12 +125,12 @@ function GrowingTree({ progress }: { progress: number }) {
   const leafCount = Math.floor(progress / 20) + 1;
   return (
     <svg width="120" height="120" viewBox="0 0 120 120">
-      <ellipse cx="60" cy="110" rx="40" ry="10" fill="#fed7aa" />
-      <rect x="55" y={110 - treeHeight} width="10" height={treeHeight} rx="5" fill="#9a3412" />
+      <ellipse cx="60" cy="110" rx="40" ry="10" fill="var(--neutral-bg-accent)" />
+      <rect x="55" y={110 - treeHeight} width="10" height={treeHeight} rx="5" fill="var(--semantic-warning)" />
       {[...Array(leafCount)].map((_, i) => (
-        <circle key={i} cx={60 + Math.sin((i / leafCount) * Math.PI * 2) * 20} cy={110 - treeHeight - 20 + Math.cos((i / leafCount) * Math.PI * 2) * 10} r={12} fill="var(--color-primary)" opacity={0.8} />
+        <circle key={i} cx={60 + Math.sin((i / leafCount) * Math.PI * 2) * 20} cy={110 - treeHeight - 20 + Math.cos((i / leafCount) * Math.PI * 2) * 10} r={12} fill="var(--color-primary)" opacity={0.85} />
       ))}
-      <circle cx="100" cy="20" r="12" fill="#fb923c" opacity={0.7} />
+      <circle cx="100" cy="20" r="12" fill="var(--semantic-warning)" opacity={0.7} />
     </svg>
   );
 }
@@ -136,7 +150,7 @@ export default function Assessment() {
   const isLastCategory = currentCategory === assessmentQuestions.length - 1;
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', background: 'var(--color-surface-alt)', borderRadius: 24, boxShadow: '0 8px 32px rgba(234,88,12,0.12)', padding: '32px 16px' }}>
+    <div style={{ maxWidth: 500, margin: '0 auto', background: 'var(--color-surface-alt)', borderRadius: 24, boxShadow: '0 8px 32px rgba(0,0,0,0.12)', padding: '32px 16px' }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <h2 style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-primary)', marginBottom: 8 }}>Ergonomic Assessment</h2>
         <p style={{ color: 'var(--color-text-soft)', marginBottom: 16 }}>Grow your wellness tree by building good habits!</p>
@@ -158,11 +172,11 @@ export default function Assessment() {
         </div>
       </div>
       {currentCategoryData.questions.map((question, questionIndex) => (
-        <div key={question.key} style={{ marginBottom: 24, padding: 20, background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(234,88,12,0.18)' }}>
-          <div style={{ fontWeight: 500, fontSize: 17, marginBottom: 12, color: '#111' }}>{questionIndex + 1}. {question.question}</div>
+        <div key={question.key} style={{ marginBottom: 24, padding: 20, background: 'var(--color-surface)', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
+          <div style={{ fontWeight: 500, fontSize: 17, marginBottom: 12, color: 'var(--color-text)' }}>{questionIndex + 1}. {question.question}</div>
           <div style={{ display: 'flex', gap: 16 }}>
             {question.options.map(option => (
-              <label key={option} style={{ display: 'flex', alignItems: 'center', gap: 8, background: formData[question.key] === option ? 'var(--color-surface-alt2)' : '#fff', border: '2px solid var(--color-primary)', borderRadius: 8, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, color: 'var(--color-primary)', fontSize: 16, boxShadow: formData[question.key] === option ? '0 2px 8px rgba(234,88,12,0.18)' : undefined, transition: 'all 0.2s' }}>
+              <label key={option} style={{ display: 'flex', alignItems: 'center', gap: 8, background: formData[question.key] === option ? 'var(--color-surface-alt2)' : '#fff', border: '2px solid var(--color-primary)', borderRadius: 8, padding: '10px 20px', cursor: 'pointer', fontWeight: 500, color: 'var(--color-primary)', fontSize: 16, boxShadow: formData[question.key] === option ? '0 2px 8px rgba(0,0,0,0.15)' : undefined, transition: 'all 0.2s' }}>
                 <input type="radio" name={question.key} value={option} checked={formData[question.key] === option} onChange={() => handleInputChange(question.key, option)} style={{ accentColor: 'var(--color-primary)' }} />
                 {option}
               </label>

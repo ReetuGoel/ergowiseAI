@@ -4,7 +4,7 @@ import { useAuth } from './auth-context';
 import { AuthGateway } from './auth-gateway';
 import Assessment, { BreakTimer } from './Assessment';
 import { ErgoWiseLogo } from './logo';
-import { BarChart3, Target, Calendar, TrendingUp, Moon, Sun, Activity } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { useToast } from './toast-context';
 import { useTheme } from './theme-context';
 import { WeeklyBreaksChart, ProgressTrendChart, ErgonomicCategoriesChart, DailyActivityChart, WellnessScoreRadial } from './charts';
@@ -44,9 +44,9 @@ function App() {
   let isDark = false;
   const [accent, setAccent] = useState<string>(() => {
     try {
-      return localStorage.getItem('ergowise:accent') || '#ea580c';
+      return localStorage.getItem('ergowise:accent') || 'var(--color-accent, var(--brand-primary))';
     } catch {
-      return '#ea580c';
+      return 'var(--color-accent, var(--brand-primary))';
     }
   });
   try {
@@ -112,7 +112,8 @@ function App() {
             <div style={{
               background: 'var(--color-surface)',
               borderRadius: 20,
-              padding: 24,
+              padding: 20,
+              paddingLeft: 32,
               marginBottom: 24,
               boxShadow: 'var(--shadow-lg)',
               border: '1px solid var(--color-surface-alt2)',
@@ -138,272 +139,49 @@ function App() {
                     border: '1px solid var(--color-primary)', 
                     padding: '8px 12px', 
                     borderRadius: 12, 
-                    cursor: 'pointer', 
-                    color: 'var(--color-primary)', 
-                    fontWeight: 600,
-                    fontSize: 14,
-                    transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 6
+                    gap: 6,
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: 'var(--color-primary)'
                   }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = 'var(--color-primary)';
-                    e.currentTarget.style.color = '#fff';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'var(--color-surface-alt2)';
-                    e.currentTarget.style.color = 'var(--color-primary)';
-                  }}
+                  aria-label="Toggle theme"
                 >
                   {isDark ? <Sun size={16} /> : <Moon size={16} />}
                   {isDark ? 'Light' : 'Dark'}
                 </button>
-                <button 
-                  onClick={handleLogout}
-                  style={{
-                    background: 'var(--color-surface-alt2)', 
-                    border: '1px solid var(--color-primary)', 
-                    padding: '8px 16px', 
-                    borderRadius: 12, 
-                    cursor: 'pointer', 
-                    color: 'var(--color-primary)', 
-                    fontWeight: 600,
-                    fontSize: 14,
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = 'var(--color-primary)';
-                    e.currentTarget.style.color = '#fff';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'var(--color-surface-alt2)';
-                    e.currentTarget.style.color = 'var(--color-primary)';
-                  }}
-                >
-                  🚪 Sign out
+                <button onClick={handleLogout} style={{ background: 'var(--color-primary)', color: '#fff', padding: '8px 12px', borderRadius: 12, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  Sign Out
                 </button>
               </div>
 
-              {/* Logo and Welcome Section */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, paddingRight: 200 }}>
-                <ErgoWiseLogo size={60} />
-                <div style={{ textAlign: 'left' }}>
-                  <h1 style={{ fontSize: 36, fontWeight: 700, color: 'var(--color-primary)', margin: 0, letterSpacing: '-0.5px' }}>ErgoWise</h1>
-                  <p style={{ fontSize: 16, color: 'var(--color-text-soft)', margin: 0, marginTop: 4 }}>Your personalized workspace wellness assistant</p>
+              {/* Logo + Welcome */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <ErgoWiseLogo size={56} showWordmark tagline="Personalized wellness assistant" />
+                <div>
+                  <h1 style={{ fontSize: 24, margin: 0, background: 'linear-gradient(90deg,var(--color-primary), var(--brand-accent))', WebkitBackgroundClip: 'text', color: 'transparent' }}>Welcome{user ? `, ${user.name}` : ''}</h1>
+                  <p style={{ margin: '6px 0 0', color: 'var(--color-text-soft)', fontSize: 14 }}>Optimize your workspace health with real-time posture insights.</p>
                 </div>
               </div>
-              
-              {/* Welcome Message */}
-              <div style={{ 
-                background: 'linear-gradient(135deg, #fff7ed, #ffedd5)', 
-                padding: '8px 16px', 
-                borderRadius: 12, 
-                border: '1px solid #fed7aa',
-                textAlign: 'center'
-              }}>
-                <h2 style={{ 
-                  fontSize: 18, 
-                  fontWeight: 600, 
-                  color: 'var(--color-primary)', 
-                  margin: 0, 
-                  marginBottom: 2 
-                }}>
-                  Welcome back, {user.name}! 👋
-                </h2>
-                <p style={{ 
-                  fontSize: 14, 
-                  color: 'var(--color-text-soft)', 
-                  margin: 0 
-                }}>
-                  Ready to improve your workspace wellness today?
-                </p>
+            </div>
+
+            {/* Tabs Content */}
+            {activeTab === 'Dashboard' && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+                <WeeklyBreaksChart />
+                <ProgressTrendChart />
+                <ErgonomicCategoriesChart />
+                <DailyActivityChart />
+                <WellnessScoreRadial score={82} />
               </div>
-            </div>
+            )}
 
-            {/* Content Area */}
-            <div style={{
-              background: 'var(--color-surface)',
-              borderRadius: 20,
-              padding: 32,
-              boxShadow: 'var(--shadow-lg)',
-              border: '1px solid var(--color-surface-alt2)'
-            }}>
-              {activeTab === 'Dashboard' && (
-                <section>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                    <BarChart3 size={28} color="var(--color-primary)" />
-                    <div>
-                      <h2 style={{ fontSize: 24, fontWeight: 600, margin: 0, color: 'var(--color-primary)' }}>Ergonomic Wellness Dashboard</h2>
-                      <p style={{ color: 'var(--color-text-soft)', margin: 0, fontSize: 14 }}>Track your workspace health and productivity habits</p>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
-                    <Card 
-                      title="Current Score" 
-                      value="82%" 
-                      subtitle="Excellent progress!" 
-                      icon={<Target size={20} />}
-                      progress={82}
-                    />
-                    <Card 
-                      title="Weekly Breaks" 
-                      value="23/35" 
-                      subtitle="Target: 35" 
-                      icon={<Calendar size={20} />}
-                      progress={66}
-                    />
-                    <Card 
-                      title="Current Streak" 
-                      value="7" 
-                      subtitle="Days of good habits" 
-                      icon={<Calendar size={20} />}
-                      progress={100}
-                    />
-                    <Card 
-                      title="Monthly Improvement" 
-                      value="+15%" 
-                      subtitle="vs last month" 
-                      valueColor="var(--color-primary)" 
-                      icon={<TrendingUp size={20} />}
-                      progress={75}
-                    />
-                  </div>
-                </section>
-              )}
-
-              {activeTab === 'Assessment' && (
-                <Assessment />
-              )}
-
-              {activeTab === 'Analytics' && (
-                <section>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                    <Activity size={28} color="var(--color-primary)" />
-                    <div>
-                      <h2 style={{ fontSize: 24, fontWeight: 600, margin: 0, color: 'var(--color-primary)' }}>Analytics Dashboard</h2>
-                      <p style={{ color: 'var(--color-text-soft)', margin: 0, fontSize: 14 }}>Track your workspace wellness patterns and improvements</p>
-                    </div>
-                  </div>
-                  
-                  {/* Top Row - Main Metrics */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
-                    <WellnessScoreRadial score={82} />
-                    <ErgonomicCategoriesChart />
-                  </div>
-                  
-                  {/* Second Row - Trends */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24, marginBottom: 24 }}>
-                    <ProgressTrendChart />
-                  </div>
-                  
-                  {/* Third Row - Daily & Weekly Patterns */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                    <DailyActivityChart />
-                    <WeeklyBreaksChart />
-                  </div>
-                </section>
-              )}
-
-              {activeTab === 'Recommendations' && (
-                <section>
-                  <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: 'var(--color-primary)' }}>Recommendations</h2>
-                  <p style={{ color: 'var(--color-text-soft)', marginBottom: 16 }}>
-                    Here you will see personalized ergonomic recommendations after your assessment.
-                  </p>
-                </section>
-              )}
-
-              {activeTab === 'Posture' && (
-                <section>
-                  <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: 'var(--color-primary)' }}>Posture Analysis</h2>
-                  <p style={{ color: 'var(--color-text-soft)', marginBottom: 16 }}>
-                    Upload up to 5 images to analyze posture and receive recommendations.
-                  </p>
-                  <PostureCapture />
-                </section>
-              )}
-
-              {activeTab === 'Break Timer' && (
-                <section>
-                  <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8, color: 'var(--color-primary)' }}>Break Management</h2>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
-                    <BreakTimer startTrigger={breakStartTrigger} />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 16 }}>
-                    <Card title="This week's breaks:" value="23/35" icon={<Calendar size={20} />} />
-                    <Card title="Average break length:" value="3.2 min" icon={<Calendar size={20} />} />
-                  </div>
-                  <Card title="Breaks today:" value="5" icon={<Calendar size={20} />} />
-                </section>
-              )}
-            </div>
+            {activeTab === 'Assessment' && <Assessment />}
+            {activeTab === 'Break Timer' && <BreakTimer startTrigger={breakStartTrigger} />}
+            {activeTab === 'Posture' && <PostureCapture />}
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function Card({ title, value, subtitle, valueColor, icon, progress }: { 
-  title: string, 
-  value: string, 
-  subtitle?: string, 
-  valueColor?: string,
-  icon?: React.ReactNode,
-  progress?: number
-}) {
-  return (
-    <div style={{
-      background: 'var(--color-surface-alt)',
-      borderRadius: 16,
-      boxShadow: '0 2px 8px rgba(234,88,12,0.12)',
-      padding: '20px 24px',
-      marginBottom: 12,
-      textAlign: 'center',
-      border: '1px solid var(--color-surface-alt2)',
-      transition: 'transform 0.2s, box-shadow 0.2s',
-      cursor: 'pointer'
-    }}
-    onMouseOver={(e) => {
-      e.currentTarget.style.transform = 'translateY(-2px)';
-      e.currentTarget.style.boxShadow = '0 4px 16px rgba(234,88,12,0.18)';
-    }}
-    onMouseOut={(e) => {
-      e.currentTarget.style.transform = 'translateY(0)';
-      e.currentTarget.style.boxShadow = '0 2px 8px rgba(234,88,12,0.12)';
-    }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
-        {icon && <div style={{ color: 'var(--color-primary)' }}>{icon}</div>}
-        <h3 style={{ fontWeight: 600, fontSize: 16, margin: 0, color: 'var(--color-text-soft)' }}>{title}</h3>
-      </div>
-      <p style={{ fontSize: 28, fontWeight: 700, color: valueColor || 'var(--color-primary)', marginBottom: 8, margin: 0 }}>{value}</p>
-      {subtitle && <p style={{ color: 'var(--color-text-soft)', fontSize: 13, margin: 0, marginBottom: 8 }}>{subtitle}</p>}
-      {progress !== undefined && (
-        <div style={{ marginTop: 8 }}>
-          <div style={{ 
-            width: '100%', 
-            background: 'var(--color-surface)', 
-            borderRadius: 8, 
-            height: 6, 
-            overflow: 'hidden' 
-          }}>
-            <div style={{ 
-              background: `linear-gradient(90deg, var(--color-primary), var(--color-accent))`, 
-              height: '100%', 
-              borderRadius: 8,
-              width: `${Math.min(progress, 100)}%`,
-              transition: 'width 0.3s ease'
-            }} />
-          </div>
-          <p style={{ fontSize: 11, color: 'var(--color-text-soft)', margin: 0, marginTop: 4 }}>
-            {progress}% complete
-          </p>
         </div>
       )}
     </div>

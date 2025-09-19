@@ -86,3 +86,55 @@ npm uninstall <package>
 ## License
 Internal / TBD
 <!-- chore: trigger azure workflow test run -->
+
+## Accessibility & Inclusive Design Enhancements
+
+This project implements a Fluent-inspired design token system and a baseline accessibility testing setup.
+
+### Reduced Motion
+Users with `prefers-reduced-motion: reduce` will have animations and transitions effectively disabled. When adding animations:
+1. Use CSS transitions/animations only where they add clarity.
+2. Wrap complex motion in `@media (prefers-reduced-motion: no-preference)`.
+3. Provide instant state changes when reduced motion is requested.
+
+### Live Announcements
+The Break Timer component includes an `aria-live` polite region to announce start, cancellation, and completion events for screen reader users.
+
+### Color Tokens & Contrast
+All colors derive from CSS variables in `src/index.css`. Avoid hard-coded hex values. See `ACCESSIBILITY.md` for contrast guidelines and token roles.
+
+### Running Accessibility Tests
+We use `jest-axe` for a minimal automated accessibility regression check.
+
+Run all tests (includes a11y):
+```bash
+npm test
+```
+
+Run only the a11y test file:
+```bash
+npm test -- a11y.test.tsx
+```
+
+If you add new components, consider adding a test:
+```tsx
+import { render } from '@testing-library/react';
+import { axe } from 'jest-axe';
+import MyComponent from './MyComponent';
+
+test('MyComponent is a11y clean', async () => {
+	const { container } = render(<MyComponent />);
+	const results = await axe(container);
+	expect(results).toHaveNoViolations();
+});
+```
+
+### Manual Checklist (Before Shipping UI)
+- Keyboard: All interactive elements reachable & operable (Enter/Space)
+- Focus: Visible, non-obstructed outline
+- Contrast: Meets WCAG AA (use a contrast checker for custom pairs)
+- Zoom: Page layout usable at 200%
+- Color: Not sole means of conveying meaning (add icon/text)
+- Motion: Respects reduced motion preference
+
+For deeper details, open `ACCESSIBILITY.md`.

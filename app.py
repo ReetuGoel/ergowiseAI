@@ -2,6 +2,10 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import os
+# Ensure torch uses weights_only=False when loading trusted checkpoints.
+# This must be set before importing torch so the loader picks it up.
+os.environ['TORCH_WEIGHTS_ONLY'] = 'False'
 import numpy as np
 import cv2
 import torch
@@ -23,9 +27,64 @@ app.add_middleware(
 MODEL_NAME = "yolov8n-pose.pt"
 
 # Create model with weights_only=False to bypass PyTorch security restriction
-import os
-os.environ['TORCH_WEIGHTS_ONLY'] = 'False'
 
+# Some PyTorch versions use a safe unpickler that blocks arbitrary globals when
+# loading checkpoints. Trusted ultralytics checkpoints contain a PoseModel class
+# that must be allowlisted for deserialization. We attempt to register the
+# The prior approach added ad-hoc allowlists for each failing global. To
+# reduce maintenance and avoid repeated edits, create a helper that attempts
+# to import and register a curated list of common classes used in ultralytics
+# and torch checkpoints. Only run this for trusted checkpoints!
+def register_safe_globals():
+    import importlib
+    try:
+        import torch as _torch
+    except Exception:
+        return
+
+    candidates = [
+        # ultralytics classes
+        "ultralytics.nn.tasks.PoseModel",
+        "ultralytics.nn.modules.block.C2f",
+    "ultralytics.nn.modules.block.Bottleneck",
+        "ultralytics.nn.modules.conv.Conv",
+        # common torch classes
+        "torch.nn.modules.conv.Conv2d",
+        "torch.nn.modules.batchnorm.BatchNorm2d",
+        "torch.nn.modules.container.Sequential",
+    "torch.nn.modules.container.ModuleList",
+        "torch.nn.modules.activation.SiLU",
+        # Add a few extra frequently-used classes that may appear
+        "torch.nn.modules.linear.Linear",
+        "torch.nn.modules.pooling.MaxPool2d",
+        "torch.nn.modules.pooling.AdaptiveAvgPool2d",
+        "collections.OrderedDict",
+    ]
+
+    for path in candidates:
+        parts = path.split('.')
+        mod_name = '.'.join(parts[:-1])
+        cls_name = parts[-1]
+        try:
+            mod = importlib.import_module(mod_name)
+            cls = getattr(mod, cls_name)
+        except Exception:
+            # If importing fails, skip silently; it's harmless to miss one
+            continue
+
+        # Try preferred API then fallback API
+        try:
+            _torch.serialization.add_safe_globals([cls])
+        except Exception:
+            try:
+                _torch.serialization.safe_globals([cls])
+            except Exception:
+                pass
+
+# Run allowlisting for a set of expected classes. This reduces repeated
+# edits; keep this conservative and only register classes we expect in
+# trusted ultralytics checkpoints.
+register_safe_globals()
 try:
     model = YOLO(MODEL_NAME)
 except Exception as e:
