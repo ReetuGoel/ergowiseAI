@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ergowiseAI/static/css/main.6d7929ef.css",
+    "main.js": "/ergowiseAI/static/js/main.acba02ab.js",
+    "static/js/453.7d9fe89e.chunk.js": "/ergowiseAI/static/js/453.7d9fe89e.chunk.js",
+    "index.html": "/ergowiseAI/index.html",
+    "main.6d7929ef.css.map": "/ergowiseAI/static/css/main.6d7929ef.css.map",
+    "main.acba02ab.js.map": "/ergowiseAI/static/js/main.acba02ab.js.map",
+    "453.7d9fe89e.chunk.js.map": "/ergowiseAI/static/js/453.7d9fe89e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6d7929ef.css",
+    "static/js/main.acba02ab.js"
+  ]
+}
