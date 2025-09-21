@@ -1,15 +1,10 @@
 'use client';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-converter';
 import * as posedetection from '@tensorflow-models/pose-detection';
 import { movenet } from '@tensorflow-models/pose-detection';
-
-/** Optional: set via environment variables, falls back to original backend */
-const API_BASE =
-  process.env.REACT_APP_API_BASE ||
-  'http://127.0.0.1:8002';  // Backend server
 
 // Utility types
 type KP = {x: number; y: number; score?: number};
@@ -136,7 +131,7 @@ function generateProfessionalAnalysis(m: Record<string, number|null>) {
   const areasToImprove: string[] = [];
   const recommendations: string[] = [];
   
-  const { neck_flexion_deg, torso_upright_deg, elbow_angle_deg, wrist_extension_deg, shoulder_asymmetry, head_tilt_deg } = m;
+  const { neck_flexion_deg, torso_upright_deg, elbow_angle_deg, shoulder_asymmetry, head_tilt_deg } = m;
 
   // Good observations
   if (head_tilt_deg != null && head_tilt_deg <= 8) {
