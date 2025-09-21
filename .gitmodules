@@ -1,5 +1,0 @@
-# This is a comment explaining the submodule
-
-[submodule "ergowise-app"]
-  path = ergowise-app
-  url = https://github.com/ReetuGoel/ergowise-app.git
