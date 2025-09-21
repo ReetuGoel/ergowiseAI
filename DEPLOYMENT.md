@@ -2,23 +2,14 @@
 
 Your ErgoWise AI posture analysis application is now deployed and accessible at:
 
-## **Live Website**
-### 🚀 **https://ReetuGoel.github.io/ergowiseAI**
+## **🚀 Live Website: https://ReetuGoel.github.io/ergowiseAI**
 
 ---
 
 ## 📋 Deployment Status
 
 ✅ **GitHub Pages**: Active and working  
-❌ **Azure Static Web Apps**: Disabled (missing API token)
-
-## 🔧 How to Enable GitHub Pages
-
-If the site isn't live yet:
-
-1. Go to repository settings: `https://github.com/ReetuGoel/ergowiseAI/settings/pages`
-2. Under **Source**, select **"GitHub Actions"**
-3. Save and wait 2-3 minutes for deployment
+🗑️ **Azure Static Web Apps**: Removed (all Azure workflows deleted)
 
 ## 🎯 Features Available
 
@@ -28,6 +19,14 @@ If the site isn't live yet:
 - ✅ Modern, accessible UI design
 - ✅ Complete privacy (client-side processing)
 - ✅ Mobile-responsive design
+
+## 🔧 How to Enable GitHub Pages (if needed)
+
+If the site isn't live yet:
+
+1. Go to repository settings: `https://github.com/ReetuGoel/ergowiseAI/settings/pages`
+2. Under **Source**, select **"GitHub Actions"**
+3. Save and wait 2-3 minutes for deployment
 
 ## 🛠️ Local Development
 
@@ -48,3 +47,5 @@ The build folder is ready to be deployed to any static hosting service.
 ---
 
 **Powered by React + TypeScript + TensorFlow.js**
+
+**No more Azure deployment errors! 🎉**
