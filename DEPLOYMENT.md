@@ -1,37 +1,63 @@
 # 🌐 ErgoWise AI - Live Websites
 
-Your ErgoWise AI posture analysis application is now deployed on multiple platforms:
+Your ErgoWise AI posture analysis application is deployed on multiple platforms with repository-specific workflows:
 
 ## **🚀 Live Websites:**
-- **Personal Repository**: https://ReetuGoel.github.io/ergowiseAI
-- **Microsoft Repository**: https://ritugoel_microsoft.github.io/ergowise-1
-- **Original Repository**: https://sharmabh_microsoft.github.io/ergowise
+- **Personal Repository**: https://ReetuGoel.github.io/ergowiseAI (GitHub Pages)
+- **Microsoft Repository**: https://ritugoel_microsoft.github.io/ergowise-1 (GitHub Pages)
+- **Original Repository**: https://sharmabh_microsoft.github.io/ergowise (GitHub Pages or Azure)
 
 ---
 
-## 📋 GitHub Pages Setup Guide
+## 📋 Deployment Workflows by Repository
 
-### For the Microsoft Repository (ritugoel_microsoft/ergowise-1)
+### **ReetuGoel/ergowiseAI** → GitHub Pages
+- **Workflow**: `deploy-reetugoel-pages.yml`
+- **Homepage**: `https://ReetuGoel.github.io/ergowiseAI`
+- **Action**: Uses `peaceiris/actions-gh-pages` to deploy to `gh-pages` branch
 
-To fix deployment issues, configure the repository settings:
+### **ritugoel_microsoft/ergowise-1** → GitHub Pages  
+- **Workflow**: `deploy-microsoft-pages.yml`
+- **Homepage**: `https://ritugoel_microsoft.github.io/ergowise-1`
+- **Action**: Uses `peaceiris/actions-gh-pages` to deploy to `gh-pages` branch
 
-#### Step 1: Enable GitHub Pages
-1. Go to: https://github.com/ritugoel_microsoft/ergowise-1
-2. Click **Settings** tab
-3. Scroll to **Pages** section (left sidebar)
-4. Under **Source**, select **Deploy from a branch**
-5. Choose **gh-pages** branch 
-6. Click **Save**
+### **sharmabh_microsoft/ergowise** → GitHub Pages or Azure
+- **Workflow**: `deploy-github-pages.yml` or `azure-static-web-apps.yml`
+- **Homepage**: `https://sharmabh_microsoft.github.io/ergowise`
+- **Action**: GitHub Pages or Azure Static Web Apps (if secrets configured)
 
-#### Step 2: Enable GitHub Actions Permissions
-1. Go to **Settings** > **Actions** > **General**
-2. Under **Actions permissions**: Select **Allow all actions and reusable workflows**
-3. Under **Workflow permissions**: Select **Read and write permissions**
-4. Check **Allow GitHub Actions to create and approve pull requests**
-5. Click **Save**
+---
 
-#### Step 3: Repository Visibility
-- Ensure repository is **Public** (or has GitHub Pages enabled for private repos)
+## ⚙️ Setup Instructions
+
+### For GitHub Pages (ReetuGoel & Microsoft Repos)
+
+1. **Enable GitHub Pages**:
+   - Go to repository **Settings** → **Pages**
+   - Source: **Deploy from a branch**
+   - Branch: **gh-pages** (auto-created by workflow)
+
+2. **Enable GitHub Actions**:
+   - **Settings** → **Actions** → **General**
+   - Actions permissions: **Allow all actions**
+   - Workflow permissions: **Read and write permissions**
+   - ✅ **Allow GitHub Actions to create and approve pull requests**
+
+3. **Repository Visibility**: Must be **Public** (or Pages enabled for private)
+
+### Troubleshooting
+
+❌ **Azure Error**: "No matching Static Web App was found"
+- **Solution**: Azure workflow is now disabled for ReetuGoel/Microsoft repos
+- Only runs for repositories with proper Azure secrets configured
+
+❌ **Permission Error**: "Resource not accessible by integration"  
+- **Solution**: Check GitHub Actions permissions (Step 2 above)
+- Ensure repository has write access enabled
+
+❌ **Build Error**: Homepage URL mismatch
+- **Solution**: Each workflow automatically sets correct homepage URL
+- No manual configuration needed
 
 ---
 
