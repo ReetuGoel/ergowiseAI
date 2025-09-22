@@ -1,23 +1,13 @@
-name: Deploy to GitHub Pages
+name: Deploy to ReetuGoel GitHub Pages
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   deploy:
-    # Only run for the original repository
-    if: github.repository == 'sharmabh_microsoft/ergowise'
+    # Only run this workflow when pushing to the ReetuGoel repository
+    if: github.repository == 'ReetuGoel/ergowiseAI'
     runs-on: ubuntu-latest
     
     steps:
@@ -33,9 +23,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Set homepage for original repository
+    - name: Ensure correct homepage for ReetuGoel deployment
       run: |
-        npm pkg set homepage="https://sharmabh_microsoft.github.io/ergowise"
+        npm pkg set homepage="https://ReetuGoel.github.io/ergowiseAI"
         echo "Homepage set to: $(npm pkg get homepage)"
     
     - name: Build application
@@ -47,3 +37,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
         force_orphan: true
+        cname: false

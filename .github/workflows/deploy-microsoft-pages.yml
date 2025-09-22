@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   build-and-deploy:
+    # Only run for the Microsoft repository
+    if: github.repository == 'ritugoel_microsoft/ergowise-1'
     runs-on: ubuntu-latest
     
     steps:
