@@ -1,16 +1,11 @@
-name: Deploy to GitHub Pages
+name: Simple GitHub Pages Deploy
 
 on:
   push:
     branches: [ main ]
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     
     steps:

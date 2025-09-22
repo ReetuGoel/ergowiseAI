@@ -1,8 +1,37 @@
-# 🌐 ErgoWise AI - Live Website
+# 🌐 ErgoWise AI - Live Websites
 
-Your ErgoWise AI posture analysis application is now deployed and accessible at:
+Your ErgoWise AI posture analysis application is now deployed on multiple platforms:
 
-## **🚀 Live Website: https://ReetuGoel.github.io/ergowiseAI**
+## **🚀 Live Websites:**
+- **Personal Repository**: https://ReetuGoel.github.io/ergowiseAI
+- **Microsoft Repository**: https://ritugoel_microsoft.github.io/ergowise-1
+- **Original Repository**: https://sharmabh_microsoft.github.io/ergowise
+
+---
+
+## 📋 GitHub Pages Setup Guide
+
+### For the Microsoft Repository (ritugoel_microsoft/ergowise-1)
+
+To fix deployment issues, configure the repository settings:
+
+#### Step 1: Enable GitHub Pages
+1. Go to: https://github.com/ritugoel_microsoft/ergowise-1
+2. Click **Settings** tab
+3. Scroll to **Pages** section (left sidebar)
+4. Under **Source**, select **Deploy from a branch**
+5. Choose **gh-pages** branch 
+6. Click **Save**
+
+#### Step 2: Enable GitHub Actions Permissions
+1. Go to **Settings** > **Actions** > **General**
+2. Under **Actions permissions**: Select **Allow all actions and reusable workflows**
+3. Under **Workflow permissions**: Select **Read and write permissions**
+4. Check **Allow GitHub Actions to create and approve pull requests**
+5. Click **Save**
+
+#### Step 3: Repository Visibility
+- Ensure repository is **Public** (or has GitHub Pages enabled for private repos)
 
 ---
 
