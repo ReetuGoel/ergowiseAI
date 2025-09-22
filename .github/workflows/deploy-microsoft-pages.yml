@@ -32,6 +32,10 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    - name: Update homepage for Microsoft deployment
+      run: |
+        npm pkg set homepage="https://ritugoel_microsoft.github.io/ergowise-1"
+    
     - name: Build application
       run: npm run build
     

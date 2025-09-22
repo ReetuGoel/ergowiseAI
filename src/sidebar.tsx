@@ -10,18 +10,15 @@ interface SidebarProps {
 
 export function Sidebar({ onQuickAction, activeTab, setActiveTab }: SidebarProps) {
   let user: any = undefined;
-  let hasAuth = false;
   try {
     // useAuth throws if no AuthProvider is present (tests render App directly)
     // so guard with try/catch to keep Sidebar usable in isolation
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const auth = useAuth();
     user = auth?.user;
-    hasAuth = true;
   } catch (err) {
     // no-op: render a fallback UI when auth is not available (e.g., in unit tests)
     user = undefined;
-    hasAuth = false;
   }
   const quickActions = [
     {
