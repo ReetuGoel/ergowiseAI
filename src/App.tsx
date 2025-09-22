@@ -158,12 +158,12 @@ function App() {
               </div>
 
               {/* Logo + Welcome */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                 <ErgoWiseLogo size={56} showWordmark tagline="Personalized wellness assistant" />
-                <div>
-                  <h1 style={{ fontSize: 24, margin: 0, background: 'linear-gradient(90deg,var(--color-primary), var(--brand-accent))', WebkitBackgroundClip: 'text', color: 'transparent' }}>Welcome{user ? `, ${user.name}` : ''}</h1>
-                  <p style={{ margin: '6px 0 0', color: 'var(--color-text-soft)', fontSize: 14 }}>Optimize your workspace health with real-time posture insights.</p>
+                <div style={{ textAlign: 'center', flex: 1 }}>
+                  <h1 style={{ fontSize: 19, margin: 0, background: 'linear-gradient(90deg,var(--color-primary), var(--brand-accent))', WebkitBackgroundClip: 'text', color: 'transparent' }}>Welcome{user ? `, ${user.name}` : ''}</h1>
                 </div>
+                <div style={{ width: '200px' }}></div>
               </div>
             </div>
 

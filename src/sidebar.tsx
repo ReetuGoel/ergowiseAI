@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from './auth-context';
-import { AvatarPicker } from './avatar-picker';
 import { CheckCircle, Play, BarChart3, Clock, Target, Zap, Settings, User } from 'lucide-react';
 
 interface SidebarProps {
@@ -215,21 +214,10 @@ export function Sidebar({ onQuickAction, activeTab, setActiveTab }: SidebarProps
               color: 'var(--color-text)',
               marginBottom: 2
             }}>
-              Quick Stats
-            </div>
-            <div style={{ 
-              fontSize: 12, 
-              color: 'var(--color-text-soft)' 
-            }}>
-              7-day streak • 82% wellness
+              {user?.name || 'User'}
             </div>
           </div>
         </div>
-        {hasAuth && (
-          <div style={{ marginTop: 12 }}>
-            <AvatarPicker size={32} />
-          </div>
-        )}
       </div>
     </div>
   );

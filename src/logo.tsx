@@ -12,12 +12,18 @@ export function ErgoWiseLogo({ size = 48, showWordmark = false, tagline = 'POSTU
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', gap: showWordmark ? 12 : 0 }}>
       <div style={{ position: 'relative', width: size, height: size }}>
-        {/* Use the beautiful ErgoWise logo image */}
+        {/* Use the new ErgoWise logo image */}
         <img
-          src="/ewlogo.png"
+          src={`${process.env.PUBLIC_URL}/ewnewlogo.png`}
           alt="ErgoWise - AI-Powered Posture Analysis"
           width={size}
           height={size}
+          onError={(e) => {
+            console.error('Logo failed to load:', e);
+            // Fallback to old logo if new one fails
+            (e.target as HTMLImageElement).src = `${process.env.PUBLIC_URL}/ewlogo.png`;
+          }}
+          onLoad={() => console.log('Logo loaded successfully')}
           style={{ 
             flexShrink: 0,
             objectFit: 'contain',
