@@ -68,8 +68,8 @@ Write-Host "🌐 Your site should be available at: https://ReetuGoel.github.io/e
 Write-Host ""
 Write-Host "📋 Next steps:" -ForegroundColor Yellow
 Write-Host "1. Go to https://github.com/ReetuGoel/ergowiseAI/settings/pages"
-Write-Host "2. Set Source to 'Deploy from a branch'"
-Write-Host "3. Select 'gh-pages' branch"
+Write-Host "2. Set Source to Deploy from a branch"
+Write-Host "3. Select gh-pages branch"
 Write-Host "4. Wait 5-10 minutes for deployment"
 
 # Switch back to main branch
