@@ -47,6 +47,11 @@ Your ErgoWise AI posture analysis application is deployed on multiple platforms 
 
 ### Troubleshooting
 
+❌ **Permission Error**: "Permission to [repo] denied to github-actions[bot]"
+- **Solution**: Updated workflows now include proper permissions and git config
+- Ensure **Settings** → **Actions** → **General** → **Workflow permissions**: **Read and write permissions**
+- ✅ Check **Allow GitHub Actions to create and approve pull requests**
+
 ❌ **Azure Error**: "No matching Static Web App was found"
 - **Solution**: Azure workflow is now disabled for ReetuGoel/Microsoft repos
 - Only runs for repositories with proper Azure secrets configured
@@ -58,6 +63,22 @@ Your ErgoWise AI posture analysis application is deployed on multiple platforms 
 ❌ **Build Error**: Homepage URL mismatch
 - **Solution**: Each workflow automatically sets correct homepage URL
 - No manual configuration needed
+
+### 🔧 Manual Repository Setup (if needed)
+
+If automatic deployment still fails, repository owners can manually:
+
+1. **Create `gh-pages` branch**:
+   ```bash
+   git checkout --orphan gh-pages
+   git rm -rf .
+   echo "GitHub Pages placeholder" > index.html
+   git add index.html
+   git commit -m "Initial gh-pages commit"
+   git push origin gh-pages
+   ```
+
+2. **Enable Pages**: Settings → Pages → Source: "Deploy from a branch" → "gh-pages"
 
 ---
 
