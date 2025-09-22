@@ -64,21 +64,58 @@ Your ErgoWise AI posture analysis application is deployed on multiple platforms 
 - **Solution**: Each workflow automatically sets correct homepage URL
 - No manual configuration needed
 
-### 🔧 Manual Repository Setup (if needed)
+### 🔧 Manual Deployment (Alternative)
 
-If automatic deployment still fails, repository owners can manually:
+If automated deployment still fails due to permission issues, use these manual scripts:
 
-1. **Create `gh-pages` branch**:
-   ```bash
-   git checkout --orphan gh-pages
-   git rm -rf .
-   echo "GitHub Pages placeholder" > index.html
-   git add index.html
-   git commit -m "Initial gh-pages commit"
-   git push origin gh-pages
-   ```
+**For Windows (PowerShell):**
+```powershell
+# Run from the project root directory
+.\deploy-manual.ps1
+```
 
-2. **Enable Pages**: Settings → Pages → Source: "Deploy from a branch" → "gh-pages"
+**For macOS/Linux (Bash):**
+```bash
+# Make script executable and run
+chmod +x deploy-manual.sh
+./deploy-manual.sh
+```
+
+**Or manually via command line:**
+```bash
+# 1. Set homepage and build
+npm pkg set homepage="https://ReetuGoel.github.io/ergowiseAI"
+npm ci
+npm run build
+
+# 2. Create/switch to gh-pages branch
+git checkout --orphan gh-pages  # or: git checkout gh-pages
+git rm -rf .
+cp -r build/* .
+echo "" > .nojekyll
+
+# 3. Commit and push
+git add .
+git commit -m "Deploy ErgoWise to GitHub Pages"
+git push origin gh-pages
+git checkout main
+```
+
+### 🔧 Repository Settings (Required)
+
+After manual or automated deployment, the repository owner must:
+
+1. **Enable GitHub Pages**: 
+   - Go to https://github.com/ReetuGoel/ergowiseAI/settings/pages
+   - Source: **Deploy from a branch** 
+   - Branch: **gh-pages**
+   - Folder: **/ (root)**
+
+2. **Enable GitHub Actions Permissions**:
+   - Go to https://github.com/ReetuGoel/ergowiseAI/settings/actions
+   - **Actions permissions**: Allow all actions
+   - **Workflow permissions**: Read and write permissions
+   - ✅ **Allow GitHub Actions to create and approve pull requests**
 
 ---
 

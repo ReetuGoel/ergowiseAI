@@ -39,12 +39,32 @@ jobs:
     - name: Build application
       run: npm run build
     
+    - name: Setup Git config
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    
+    - name: Create gh-pages branch if it doesn't exist
+      run: |
+        git fetch origin
+        if ! git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+          echo "Creating gh-pages branch..."
+          git checkout --orphan gh-pages
+          git rm -rf .
+          echo "<!DOCTYPE html><html><head><title>ErgoWise AI</title></head><body><h1>Setting up ErgoWise AI...</h1></body></html>" > index.html
+          git add index.html
+          git commit -m "Initial gh-pages commit"
+          git push origin gh-pages
+          git checkout main
+        fi
+    
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
-        force_orphan: true
+        force_orphan: false
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'
         commit_message: 'Deploy ErgoWise to GitHub Pages'
+        enable_jekyll: false
